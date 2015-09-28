@@ -8,4 +8,4 @@ config.mysql.database = "database";
 config.mysql.user = "root";
 config.mysql.password = "password";
 
-module.exports = "config";
+module.exports = config;

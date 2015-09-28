@@ -14,19 +14,16 @@ var con = mysql.createConnection({
 con.connect(function(err) {
     if(err) {
         console.log("Error connection to MySQL");
+        console.log(err);
         return;
     }
     console.log("Connection established");
 });
 
-//var term = process.argv[2];
-//console.log("Searching for term: " + term);
-
 console.time("SQL search");
 
 async.eachSeries(terms, function(term, callback) {
-    con.query("SELECT * FROM words WHERE word LIKE ?", "%"+term+"%", function(err, resp) {
-        console.log("Results found " + resp.length);
+    con.query("SELECT * FROM words WHERE word LIKE ?", ""+term+"%", function(err, resp) {
         callback();
     });
 }, function done() {
