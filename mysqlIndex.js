@@ -1,11 +1,12 @@
 var mysql = require("mysql");
-var fs = require('fs')
+var fs = require('fs');
+var config = require("./config");
 
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "search"
+    host: config.mysql.host,
+    user: config.mysql.user,
+    password: config.mysql.password,
+    database: config.mysql.database
 });
 
 con.connect(function(err) {
@@ -21,7 +22,7 @@ array = shuffle(array);
 var arlen = array.length;
 console.log("Adding " + arlen + " terms to index");
 var it = 0;
-for(i in array) {
+for(var i in array) {
     var word = { word: array[i] };
     con.query("INSERT INTO words SET ?", word, function(err, resp) {
         it += 1;

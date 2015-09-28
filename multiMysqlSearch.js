@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var fs = require('fs');
+var async = require("async");
+var terms = require("./terms");
 var config = require("./config");
 
 var con = mysql.createConnection({
@@ -17,12 +19,17 @@ con.connect(function(err) {
     console.log("Connection established");
 });
 
-var term = process.argv[2];
-console.log("Searching for term: " + term);
+//var term = process.argv[2];
+//console.log("Searching for term: " + term);
 
 console.time("SQL search");
-con.query("SELECT * FROM words WHERE word LIKE ?", "%"+term+"%", function(err, resp) {
+
+async.eachSeries(terms, function(term, callback) {
+    con.query("SELECT * FROM words WHERE word LIKE ?", "%"+term+"%", function(err, resp) {
+        console.log("Results found " + resp.length);
+        callback();
+    });
+}, function done() {
     console.timeEnd("SQL search");
-    console.log(resp);
     process.exit();
 });
